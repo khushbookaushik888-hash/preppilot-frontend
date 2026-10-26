@@ -1,5 +1,6 @@
 
 import pandas as pd
+from sklearn.dummy import DummyClassifier
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
@@ -9,8 +10,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 
-file_path = r"C:\Users\KHUSHBOO KAUSHIK\Downloads\preppilot-frontend-main\ml\prepilot_ml_training_dataset_60k.csv"
-
+file_path = "ml/prepilot_ml_training_dataset_60k - Copy.csv"
 df = pd.read_csv(file_path)
 
 target = "interview_readiness"
@@ -69,3 +69,41 @@ print("\nTraining rows:", X_train.shape[0])
 print("Testing rows:", X_test.shape[0])
 
 print("\nPreprocessing pipeline created successfully!")
+
+# Train a Random Forest classifier
+model = Pipeline(steps=[
+    ("preprocessor", preprocessor),
+    ("classifier", RandomForestClassifier(
+        n_estimators=100,
+        random_state=42,
+        class_weight="balanced",
+        n_jobs=-1
+    ))
+])
+
+print("\nTraining Random Forest model...")
+model.fit(X_train, y_train)
+
+# Make predictions on unseen test data
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+
+print("\nModel Accuracy:", round(accuracy * 100, 2), "%")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred, zero_division=0))
+# Compare against a simple baseline
+baseline = DummyClassifier(strategy="most_frequent")
+baseline.fit(X_train, y_train)
+
+baseline_pred = baseline.predict(X_test)
+baseline_accuracy = accuracy_score(y_test, baseline_pred)
+
+print("\nBaseline Accuracy:", round(baseline_accuracy * 100, 2), "%")
+print("Random Forest Accuracy:", round(accuracy * 100, 2), "%")
+print(
+    "Improvement over baseline:",
+    round((accuracy - baseline_accuracy) * 100, 2),
+    "percentage points"
+)

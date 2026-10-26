@@ -1,8 +1,7 @@
 
 import pandas as pd
 
-file_path = r"C:\Users\KHUSHBOO KAUSHIK\Downloads\preppilot-frontend-main\ml\prepilot_ml_training_dataset_60k.csv"
-
+file_path = "ml/prepilot_ml_training_dataset_60k - Copy.csv"
 df = pd.read_csv(file_path)
 
 target = "interview_readiness"
