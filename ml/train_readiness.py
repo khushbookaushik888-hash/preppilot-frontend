@@ -20,7 +20,7 @@ exclude_columns = [
     "interview_readiness",
     "placement_probability",
     "primary_skill_gap",
-    "target_role_match"
+    "academic_performance"
 ]
 
 X = df.drop(columns=exclude_columns)
@@ -86,6 +86,29 @@ model.fit(X_train, y_train)
 
 # Make predictions on unseen test data
 y_pred = model.predict(X_test)
+
+# Evaluate model separately for each job role
+test_results = X_test[["target_role_match"]].copy()
+test_results["actual"] = y_test
+test_results["predicted"] = y_pred
+
+for role in sorted(test_results["target_role_match"].unique()):
+    role_data = test_results[
+        test_results["target_role_match"] == role
+    ]
+
+    print(f"\n--- {role} ---")
+    print("Test records:", len(role_data))
+    print(
+        pd.crosstab(
+            role_data["actual"],
+            role_data["predicted"],
+            rownames=["Actual"],
+            colnames=["Predicted"],
+            normalize="index"
+        ).round(3)
+    )
+
 
 # Evaluate the model
 accuracy = accuracy_score(y_test, y_pred)
