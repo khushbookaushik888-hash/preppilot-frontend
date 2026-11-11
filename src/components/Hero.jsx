@@ -4,11 +4,15 @@ function Hero() {
             <h1>Prepare Smarter. Interview Better.</h1>
 
             <p>
-                PrePilot helps you prepare for technical and behavioral
-                interviews with AI-powered practice and feedback.
+                PrePilot looks at your marks, coding practice and
+                preparation, and tells you how ready you are for the
+                interview - Poor, Average, Good or Excellent - before the
+                real interview.
             </p>
 
-            <button>Get Started</button>
+            <a href="#predictor">
+                <button type="button">Check My Readiness</button>
+            </a>
         </main>
     );
 }
